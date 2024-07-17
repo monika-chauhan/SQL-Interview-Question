@@ -36,8 +36,11 @@ These two keywords are used to specify that a trigger block is going to be decla
 It specifies the name of the trigger. Trigger name has to be unique and shouldn’t repeat.
 --( Before | After )
 This specifies when the trigger will be executed. It tells us the time at which the trigger is initiated, i.e, either before the ongoing event or after.
---Before Triggers: are used to update or validate record values before they’re saved to the database. 
---After Triggers: are used to access field values that are set by the system and to effect changes in other records. The records that activate the after trigger are read-only. We cannot use After trigger if we want to update a record because it will lead to read-only error.
+--Before Triggers: 
+are used to update or validate record values before they’re saved to the database. 
+--After Triggers: 
+are used to access field values that are set by the system and to effect changes in other records. The records that activate the after trigger are read-only. 
+We cannot use After trigger if we want to update a record because it will lead to read-only error.
 --[ Insert | Update | Delete ]
 These are the DML operations and we can use either of them in a given trigger.
 --on [ Table_Name ]
@@ -81,7 +84,8 @@ If any of the tasks fail, the transaction fails. Commands: Begin transaction,  c
 DQL (Data Query Language)  are used for performing queries on the data within schema objects. Commands: select 
 
 Questions 10: What are aggregate function and when do we use them? explain with few example?
-Answer: An aggregate function in SQL returns one value after calculating multiple values of a column. We often use aggregate functions with the GROUP BY and HAVING clauses of the SELECT statement.
+Answer: An aggregate function in SQL returns one value after calculating multiple values of a column. We often use aggregate functions with the GROUP BY and HAVING 
+        clauses of the SELECT statement.
 --There are 5 types of SQL aggregate functions:
 Count() : function returns the number of rows in a database table.
 Sum() : function returns the total sum of a numeric column.
@@ -89,13 +93,16 @@ Avg() : function calculates the average of a set of values.
 Min() : aggregate function returns the lowest value (minimum) in a set of non-NULL values.
 Max() : aggregate function returns the highest value (maximum) in a set of non-NULL values.
 --Why Use Aggregate Functions?
-Aggregate functions are a vital component of database management systems. They allow us to perform calculations on large data sets quickly and efficiently. For example, these functions generate statistical reports, perform financial analysis, and manage inventory levels. 
+Aggregate functions are a vital component of database management systems. They allow us to perform calculations on large data sets quickly and efficiently. 
+        For example, these functions generate statistical reports, perform financial analysis, and manage inventory levels. 
 
 Question 11:  Which is faster between CTE and subquery?
-Answer: It is important to keep in mind that CTEs are just syntactic sugar and not a fundamental feature. They will, by definition, NEVER be faster than a proper subquery and often are slower (but, you say, what about materialized CTEs  well, those are just syntactic sugar for materialized/indexed views).
+Answer: It is important to keep in mind that CTEs are just syntactic sugar and not a fundamental feature. They will, by definition, NEVER be faster than a proper
+        subquery and often are slower (but, you say, what about materialized CTEs  well, those are just syntactic sugar for materialized/indexed views).
 
 Questions 12: What are the constraints and types of constraints?
-Answer: Constraints are used to limit the type of data that can go into a table. This ensures the accuracy and reliability of the data in the table. If there is any violation between the constraint and the data action, the action is aborted.
+Answer: Constraints are used to limit the type of data that can go into a table. This ensures the accuracy and reliability of the data in the table.
+        If there is any violation between the constraint and the data action, the action is aborted.
 The following constraints are commonly used in SQL:
 
 NOT NULL - Ensures that a column cannot have a NULL value
@@ -107,7 +114,8 @@ DEFAULT - Sets a default value for a column if no value is specified
 CREATE INDEX - Used to create and retrieve data from the database very quickly
 
 Question 13: Types of Keys?
-Answer: They facilitate efficient data retrieval, ensure data integrity, and establish relationships between tables. With these Keys, SQL databases would resemble unorganised collections of data, making it easier to manage and query effectively.  
+Answer: They facilitate efficient data retrieval, ensure data integrity, and establish relationships between tables. With these Keys, SQL databases would resemble
+        unorganised collections of data, making it easier to manage and query effectively.  
 SQL offers several types of Keys, each serving a distinct purpose in the database ecosystem: 
 1) Primary Key: It is an identifier for each record in a table. It ensures data uniqueness and serves as a reference for establishing relationships.  
 2) Unique Key: Like a Primary Key, a Unique Key enforces uniqueness but allows null values. It is used for columns that must be unique but might contain missing information.  
@@ -168,10 +176,12 @@ SOME	    TRUE if any of the subquery values meet the condition
 
 Question 15: Difference between Group by and where clause?
 Answer: Where Clause is generally used to filter the rows from a table based on a specific condition. 
-Group by clause is used to group rows by one or more columns. It does not involve an aggregate function. It involves aggregations functions like SUM(), AVG(), COUNT(),MAX() etc.
+Group by clause is used to group rows by one or more columns. It does not involve an aggregate function. It involves aggregations functions like SUM(), AVG(), 
+        COUNT(),MAX() etc.
 
 Question 16: What are views?
-Answer: In SQL, a view is a virtual table based on the result-set of an SQL statement. A view contains rows and columns, just like a real table. The fields in a view are fields from one or more real tables in the database.
+Answer: In SQL, a view is a virtual table based on the result-set of an SQL statement. A view contains rows and columns, just like a real table.
+        The fields in a view are fields from one or more real tables in the database.
 
 Question 17: what is the difference between nvarchar and varchar?
 Answer: Varchar:- stores Non-unicode or English character data types, and it can contain a maximum of 8000 characters. It only supports ASCII values.
@@ -180,21 +190,28 @@ Nvarchar:- stores Unicode or Non-English character data types, and it can contai
 Question 18: what is the difference between char and nchar?
 Answer: The collation order of the CHAR data type follows the code-set order,
 But the collating order of the NCHAR data type can be a localized order, if DB_LOCALE (or SET COLLATION) specifies a locale that defines a localized order for collation.
-CHAR(size)	 : A FIXED length string (can contain letters, numbers, and special characters). The size parameter specifies the column length in characters - can be from 0 to 255. Default is 1
+CHAR(size)	 : A FIXED length string (can contain letters, numbers, and special characters).The size parameter specifies the column length in characters - can be from 0 to 255. Default is 1
 nchar	     : Fixed width Unicode string	4,000 characters	Defined width x 2
 
 Question 19: What are index and their types?
 Answer: Indexes are used to retrieve data from the database very fast. The users cannot see the indexes, they are just used to speed up searches/queries.
 There are various types of indexes in SQL server: 
 Clustered Index : Clustered Index stores and sort rows of data in a view or table depending on their central values. 
-Non-Clustered Index : It represents a structure, which is isolated from data rows. This types of indexes in SQL server covers the non-clustered key values, and each worth pair has a pointer to the data row that comprises vital significance. 
-Column Store Index : A column store index is one of the types of indexes in SQL Server that has a standard type of index with regards to putting away and questioning enormous data warehousing truth tables. 
-Filtered Index :A filtered index is one of the types of indexes in an SQL server that is made when a column has just a few applicable numbers for questions on the subset of values. If, when a table comprises heterogeneous data rows, a separated list is made in SQL for at least one sort of data. 
-Hash Index : Hash Index is one of the types of indexes in SQL server that slots containing a pointer or an array of N buckets and a row on each slot or bucket. It utilizes the Hash function F (K, N), where N is several buckets and K is critical. 
-Unique Index : The unique index in the SQL server confirms and guarantees that the index key doesn’t contain any copy esteems and along these lines, empowers the clients to examine that each row in the table is exceptional in either way. 
+Non-Clustered Index : It represents a structure, which is isolated from data rows. This types of indexes in SQL server covers the non-clustered key values, 
+                        and each worth pair has a pointer to the data row that comprises vital significance. 
+Column Store Index : A column store index is one of the types of indexes in SQL Server that has a standard type of index with regards to putting away and 
+                        questioning enormous data warehousing truth tables. 
+Filtered Index :A filtered index is one of the types of indexes in an SQL server that is made when a column has just a few applicable numbers for questions
+                on the subset of values. If, when a table comprises heterogeneous data rows, a separated list is made in SQL for at least one sort of data. 
+Hash Index : Hash Index is one of the types of indexes in SQL server that slots containing a pointer or an array of N buckets and a row on each slot or bucket.
+                It utilizes the Hash function F (K, N), where N is several buckets and K is critical. 
+Unique Index : The unique index in the SQL server confirms and guarantees that the index key doesn’t contain any copy esteems and along these lines, empowers the 
+        clients to examine that each row in the table is exceptional in either way. 
 
 Question 20: Different types of relationships in SQL?
-Answer: Relationships in SQL refer to the associations or connections between tables in a relational database. These relationships are established using foreign keys, which are columns in a table that refer to the primary key in another table. Relationships help organize and structure data, allowing for efficient data retrieval and maintaining data integrity.
+Answer: Relationships in SQL refer to the associations or connections between tables in a relational database. These relationships are established using foreign keys,
+        which are columns in a table that refer to the primary key in another table. Relationships help organize and structure data, allowing for efficient data retrieval
+        and maintaining data integrity.
 Type of Relationships in SQL:
 one-to-one: Definition: Each record in Table A is associated with one and only one record in Table B, and vice versa.
             Setup: Include a foreign key in one of the tables that references the primary key of the other table.
@@ -214,7 +231,8 @@ Question 22: How many types of Clause in SQL?
 Answer: he sql clauses can help filter out the data according to the user needs. The main clauses are SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, INSERT, UPDATE, DELETE, and JOIN. 
 
 Question 23: Difference between primary and secondary key?
-Answer: A key that is unique, not null, and is selected by the database administrator to uniquely identify tuples is called the primary key. A key that uniquely identifies rows but is not selected as the primary key is known as a secondary key or alternate key.
+Answer: A key that is unique, not null, and is selected by the database administrator to uniquely identify tuples is called the primary key. 
+        A key that uniquely identifies rows but is not selected as the primary key is known as a secondary key or alternate key.
 
 Question 24: Find the second largest Salary from employee table?
 Answer: SELECT * FROM(
@@ -251,7 +269,8 @@ Functions are designed to encapsulate calculations or transformations and return
 
 Question 29: Do we use variable in views?
 Answer: Although in earlier versions of SQL Server, the @@ functions are referred to as global variables, @@ functions are not variables, 
-and they do not have the same behaviors as variables. The @@ functions are system functions, and their syntax usage follows the rules for functions. You can not use variables in a view.
+and they do not have the same behaviors as variables. The @@ functions are system functions, and their syntax usage follows the rules for functions.
+        You can not use variables in a view.
 
 Question 30: What are the limitations of views?
 Answer:Limitations When Working with SQL Server Views
