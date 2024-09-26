@@ -1,0 +1,120 @@
+1. What Is a Window Function in SQL?
+Anwer : Window functions are SQL functions that operate on a set of records called the “window” or the “window frame”.
+The “window”  is a set of rows that are somehow related to the row currently being processed by the query (e.g. all rows 
+before the current row, 5 rows before the current row, or 3 rows after the current row).
+Window functions are similar to aggregate functions in that they compute statistics for a group of rows. However, window functions do not collapse rows;
+they keep the details of individual rows.
+Window functions can be organized into the following four categories: aggregate functions, ranking functions, analytic functions,
+and distribution functions.
+
+Aggregate functions are those that you use with GROUP BY. This includes:
+
+COUNT() counts the number of rows within the window.
+AVG() calculates the average value for a given column for all the records in the window.
+MAX() obtains the maximum value of a column for all the records in the window.
+SUM() returns the sum of all values in a given column within the window.
+In the ranking category:
+
+ROW_NUMBER() returns the position of the row in the result set.
+RANK() ranks rows based on a given value. When two rows are in the same position, it awards them the same rank and leaves the next position empty (e.g. 1, 2, 3, 3, 5...).
+DENSE_RANK() also ranks rows by a given value, but it does not leave the next position empty (e.g. 1, 2, 3, 3, 4, 5...).
+
+In the analytic category, the functions LEAD(), LAG() or FIRST_VALUE() allow us to obtain data from other rows in the same
+window. LEAD() returns values from rows below of the current row; LAG() from rows above the current row. 
+
+Finally, in the distribution category there are functions like PERCENT_RANK() and CUME_DIST() that can obtain percentile 
+rankings or cumulative distributions. Check out our Window Functions course for step-by-step instructions on how to use these functions.
+
+
+2. What Is the Syntax of the OVER () Clause ?
+The OVER() clause is used to define which rows will be in the window frame. The following sub-clauses can be present in the 
+OVER() clause:
+PARTITION BY defines the partition, or the groups of rows within the window frame, that the window function will use to
+create a result. (This will be explained below.)
+ORDER BY defines the order of the rows in the window frame.
+ROWS/RANGE define the upper and lower limits of the window frame.
+
+All subclauses of OVER() are optional and can be omitted. In that case, functions will be performed on the entire window frame.
+
+The following SQL shows the OVER() clause at work:
+SELECT
+first_name,
+last_name,
+department,
+salary,
+AVG(salary) OVER (PARTITION BY department)
+FROM employee
+
+3. Describe the Difference Between Window Functions and Aggregate Functions.
+The main difference between window functions and aggregate functions is that aggregate functions group multiple rows into a
+single result row; all the individual rows in the group are collapsed and their individual data is not shown. On the other 
+hand, window functions produce a result for each individual row. This result is usually shown as a new column value in every
+row within the window.
+The collapse of rows is an important feature of aggregate functions. For example, we cannot solve the problem “Return all the
+employees with their salary and the maximum salary in their department” with aggregate functions due to the collapse limitation.
+
+4. What’s the Difference Between Window Functions and the GROUP BY Clause?
+Aggregate functions are frequently used with the GROUP BY clause, which defines the groups of rows where the aggregate function
+will work. The GROUP BY clause groups individual rows into sets of rows, allowing the execution of aggregate functions like
+SUM(), AVG() or MAX() on these sets. Any column from the individual rows cannot be part of the result, as we can see in the 
+following SQL query:
+SELECT  
+   department_name,
+   AVG(salary)      -- AVG is an aggregate function
+FROM  employee
+GROUP BY department_name
+
+The following SQL query is equivalent to the previous one, but it uses window functions instead of GROUP BY:
+SELECT
+  department_name,
+  AVG(salary) OVER(PARTITION BY department_name) -- AVG is a window function
+FROM employee
+
+7. How Do You Define the Window Frame?
+Window functions calculate an aggregated result based on a set of records called the “window” or “window frame”. 
+Window frames are defined by the OVER() clause.
+An empty OVER() clause means that the window is the entire dataset:
+SELECT employee_name,
+       salary,
+       department_name,
+       AVG(salary) OVER () avg_salary
+FROM employee
+
+8. How Does ORDER BY Work with OVER?
+Some window functions (like LAG(), LEAD(), and FIRST_VALUE()) work on an ordered window of records. When using one of these functions, we need the ORDER BY sub-clause to define the order criteria. A good example of that is the previous query we used to calculate the variation percentage for cryptocurrencies:
+
+SELECT Symbol,
+       Timestamp,
+       Value,
+       (Value - LEAD(Value) OVER (PARTITION BY Symbol ORDER BY Timestamp) /  
+       LEAD(Value) OVER (PARTITION BY Symbol ORDER BY Timestamp) AS “% variation”
+FROM   Cryptocurrencies
+In the above query, the OVER clause has two sub-clauses: PARTITION BY and ORDER BY. PARTITION BY defines which records are in 
+each window and ORDER BY defines the order of the records in the window. (In this example, we order records based on their 
+timestamp.) Then the LEAD() function returns the value of the previous record.
+9. Explain What UNBOUNDED PRECEDING Does.
+A window frame is a set of rows that are somehow related to the current row, which is evaluated separately within each 
+partition. When we use the ORDER BY clause, we can optionally define upper and lower limits for the window frame. 
+The limits can be defined as:
+
+UNBOUNDED PRECEDING
+n PRECEDING
+CURRENT ROW
+n FOLLOWING
+UNBOUNDED FOLLOWING
+These limits can be defined with the RANGE or ROWS sub-clauses in the OVER() clause. UNBOUNDED PRECEDING indicates the lower limit of the window is the first record in the window; in the same way, the upper limit can be defined with UNBOUNDED FOLLOWING or CURRENT ROW. These limits should be used only with ordered windows.
+
+
+10. Describe SQL’s Order of Operations and Window Functions’ Place in This Order.
+1.FROM / JOINS
+2.WHERE
+3.GROUP BY
+4.Aggregate Functions
+5.HAVING
+6.Window Functions
+7.SELECT
+8.DISTINCT
+9.UNION / INTERSECT / EXCEPT
+10.ORDER BY
+11.OFFSET
+12.LIMIT / FETCH / TOP
