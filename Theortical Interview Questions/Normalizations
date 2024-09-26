@@ -1,0 +1,750 @@
+Question1. What is Normalization in SQL?
+Normalization, in this context, is the process of organizing data within a database (relational database) to eliminate data 
+anomalies, such as redundancy.
+In simpler terms, it involves breaking down a large, complex table into smaller and simpler tables while maintaining data 
+relationships.
+Normalization is commonly used when dealing with large datasets.
+Let’s take a brief look at some scenarios where normalization is often used.
+
+Question2 : Why is Normalization in SQL Important?
+Normalization plays a crucial role in database design. Here are several reasons why it’s essential:
+
+Reduces redundancy: Redundancy is when the same information is stored multiple times, and a good way of avoiding this is by splitting data into smaller tables.
+Improves query performance: You can perform faster query execution on smaller tables that have undergone normalization.
+Minimizes update anomalies: With normalized tables, you can easily update data without affecting other records.
+Enhances data integrity: It ensures that data remains consistent and accurate.
+
+Question : Different Types of Database Normalization
+So far, we have looked at what normalization in SQL is, why normalization in SQL is important, and what causes the need for normalization. Database normalization comes in different forms, each with increasing levels of data organization.
+
+In this section, we will briefly discuss the different normalization levels and then explore them deeper in the next section.
+
+database normalization
+First Normal Form (1NF)
+This normalization level ensures that each column in your data contains only atomic values. Atomic values in this context means that each entry in a column is indivisible. It is like saying that each cell in a spreadsheet should hold just one piece of information. 1NF ensures atomicity of data, with each column cell containing only a single value and each column having unique names.
+
+Second Normal Form (2NF)
+Eliminates partial dependencies by ensuring that non-key attributes depend only on the primary key. What this means, in essence, is that there should be a direct relationship between each column and the primary key, and not between other columns.
+
+Third Normal Form (3NF)
+Removes transitive dependencies by ensuring that non-key attributes depend only on the primary key. This level of normalization builds on 2NF.
+
+Boyce-Codd Normal Form (BCNF)
+This is a more strict version of 3NF that addresses additional anomalies. At this normalization level, every determinant is a candidate key.
+
+Fourth Normal Form (4NF)
+This is a normalization level that builds on BCNF by dealing with multi-valued dependencies.
+
+Fifth Normal Form (5NF)
+5NF is the highest normalization level that addresses join dependencies. It is used in specific scenarios to further minimize redundancy by breaking a table into smaller tables.
+
+Database Normalization With Real-World Examples
+We have already highlighted all the data normalization levels. Let’s further explore each of them in more depth with examples and explanations.
+
+First Normal Form (1NF) Normalization
+1NF ensures that each column cell contains only atomic values. Imagine a library database with a table storing book information (title, author, genre, and borrowed_by). If the table is not normalized, borrowed_by could contain a list of borrower names separated by commas. This violates 1NF, as a single cell holds multiple values. The table below is a good representation of a table that violates 1NF, as described earlier.
+
+title
+
+author
+
+genre
+
+borrowed_by
+
+To Kill a Mockingbird
+
+Harper Lee
+
+Fiction
+
+John Doe, Jane Doe, James Brown
+
+The Lord of the Rings
+
+J. R. R. Tolkien
+
+Fantasy
+
+Emily Garcia, David Lee
+
+Harry Potter and the Sorcerer’s Stone
+
+J.K. Rowling
+
+Fantasy
+
+Michael Chen
+
+The solution?
+In 1NF, we create a separate table for borrowers and link them to the book table. These tables can either be linked using the foreign key in the borrower table or a separate linking table. The foreign key in the borrowers table approach involves adding a foreign key column to the borrowers table that references the primary key of the books table. This will enforce a relationship between the tables, ensuring data consistency.
+
+You can find a representation of this below:
+
+Books table
+
+book_id (PK)
+
+title
+
+author
+
+genre
+
+1
+
+To Kill a Mockingbird
+
+Harper Lee
+
+Fiction
+
+2
+
+The Lord of the Rings
+
+J. R. R. Tolkien
+
+Fantasy
+
+3
+
+Harry Potter and the Sorcerer’s Stone
+
+J.K. Rowling
+
+Fantasy
+
+Borrowers table
+
+borrower_id (PK)
+
+name
+
+book_id (FK)
+
+1
+
+John Doe
+
+1
+
+2
+
+Jane Doe
+
+1
+
+3
+
+James Brown
+
+1
+
+4
+
+Emily Garcia
+
+2
+
+5
+
+David Lee
+
+2
+
+6
+
+Michael Chen
+
+3
+
+Second Normal Form (2NF)
+This level of normalization, as already described, builds upon 1NF by ensuring there are no partial dependencies on the primary key. In simpler terms, all non-key attributes must depend on the entire primary key and not just part of it.
+
+From the 1NF that was implemented, we already have two separate tables (you can check the 1NF section).
+
+Now, let’s say we want to link these tables to record borrowings. The initial approach might be to simply add a borrower_id column to the books table, as shown below:
+
+book_id (PK)
+
+title
+
+author
+
+genre
+
+borrower_id (FK)
+
+1
+
+To Kill a Mockingbird
+
+Harper Lee
+
+Fiction
+
+1
+
+2
+
+The Lord of the Rings
+
+J. R. R. Tolkien
+
+Fantasy
+
+NULL
+
+3
+
+Harry Potter and the Sorcerer’s Stone
+
+J.K. Rowling
+
+Fantasy
+
+6
+
+This might look like a solution, but it violates 2NF simply because the borrower_id only partially depends on the book_id. A book can have multiple borrowers, but a single borrower_id can only be linked to one book in this structure. This creates a partial dependency.
+
+The solution?
+We need to achieve the many-to-many relationship between books and borrowers to achieve 2NF. This can be done by introducing a separate table:
+
+Book_borrowings table
+
+borrowing_id (PK)	book_id (FK)	borrower_id (FK)	borrowed_date
+1	1	1	2024-05-04
+2	2	4	2024-05-04
+3	3	6	2024-05-04
+This table establishes a clear relationship between books and borrowers. The book_id and borrower_id act as foreign keys, referencing the primary keys in their respective tables. This approach ensures that borrower_id depends on the entire primary key (book_id) of the books table, complying with 2NF.
+
+Third Normal Form (3NF)
+3NF builds on 2NF by eliminating transitive dependencies. A transitive dependency occurs when a non-key attribute depends on another non-key attribute, which in turn depends on the primary key. It basically takes its meaning from the transitive law.
+
+From the 2NF we already implemented, there are three tables in our library database:
+
+Books table
+
+book_id (PK)
+
+title
+
+author
+
+genre
+
+1
+
+To Kill a Mockingbird
+
+Harper Lee
+
+Fiction
+
+2
+
+The Lord of the Rings
+
+J. R. R. Tolkien
+
+Fantasy
+
+3
+
+Harry Potter and the Sorcerer’s Stone
+
+J.K. Rowling
+
+Fantasy
+
+Borrowers table
+
+borrower_id (PK)
+
+name
+
+book_id (FK)
+
+1
+
+John Doe
+
+1
+
+2
+
+Jane Doe
+
+1
+
+3
+
+James Brown
+
+1
+
+4
+
+Emily Garcia
+
+2
+
+5
+
+David Lee
+
+2
+
+6
+
+Michael Chen
+
+3
+
+Book_borrowings table
+
+borrowing_id (PK)
+
+book_id (FK)
+
+borrower_id (FK)
+
+borrowed_date
+
+1
+
+1
+
+1
+
+2024-05-04
+
+2
+
+2
+
+4
+
+2024-05-04
+
+3
+
+3
+
+6
+
+2024-05-04
+
+The 2NF structure looks efficient, but there might be a hidden dependency. Imagine we add a due_date column to the books table. This might seem logical at first sight, but it’s going to create a transitive dependency where:
+
+The due_date column depends on the borrowing_id (a non-key attribute) from the book_borrowings table.
+The borrowing_id in turn depends on book_id (the primary key) of the books table.
+The implication of this is that due_date relies on an intermediate non-key attribute (borrowing_id) instead of directly depending on the primary key (book_id). This violates 3NF.
+
+The solution?
+We can move the due_date column to the most appropriate table by updating the book_borrowings table to include the due_date and returned_date columns.
+
+Below is the updated table:
+
+borrowing_id (PK)
+
+book_id (FK)
+
+borrower_id (FK)
+
+borrowed_date
+
+due_date
+
+1
+
+1
+
+1
+
+2024-05-04
+
+2024-05-20
+
+2
+
+2
+
+4
+
+2024-05-04
+
+2024-05-18
+
+3
+
+3
+
+6
+
+2024-05-04
+
+2024-05-10
+
+By placing the due_date column in the book_borrowing table, we have successfully eliminated the transitive dependency.
+
+What this means is that due_date now directly depends on the combined relationship between book_id and borrower_id. In this context, book_id and borrower_id are acting as a composite foreign key, which together form the primary key of the book_borrowings table.
+
+Boyce-Codd Normal Form (BCNF)
+BCNF is based on functional dependencies that consider all candidate keys in a relationship.
+
+Functional dependencies (FD) define relationships between attributes within a relational database. An FD states that the value of one column determines the value of another related column. FDs are very important because they guide the process of normalization by identifying dependencies and ensuring data is appropriately distributed across tables.
+
+BCNF is a stricter version of 3NF. It ensures that every determinant (a set of attributes that uniquely identify a row) in a table is a candidate key (a minimal set of attributes that uniquely identify a row). The whole essence of this is that all determinants should be able to serve as primary keys.
+
+It ensures that every functional dependency (FD) has a superkey as its determinant. In other words, if X —> Y (X determines Y) holds, X must be a candidate key (superkey) of the relation. Please note that X and Y are columns in a data table.
+
+As a build-up from the 3NF, we have three tables:
+
+Books table
+
+book_id (PK)
+
+title
+
+author
+
+genre
+
+1
+
+To Kill a Mockingbird
+
+Harper Lee
+
+Fiction
+
+2
+
+The Lord of the Rings
+
+J. R. R. Tolkien
+
+Fantasy
+
+3
+
+Harry Potter and the Sorcerer’s Stone
+
+J.K. Rowling
+
+Fantasy
+
+Borrowers table
+
+borrower_id (PK)
+
+name
+
+book_id (FK)
+
+1
+
+John Doe
+
+1
+
+2
+
+Jane Doe
+
+1
+
+3
+
+James Brown
+
+1
+
+4
+
+Emily Garcia
+
+2
+
+5
+
+David Lee
+
+2
+
+6
+
+Michael Chen
+
+3
+
+Book_borrowings table
+
+borrowing_id (PK)
+
+book_id (FK)
+
+borrower_id (FK)
+
+borrowed_date
+
+due_date
+
+1
+
+1
+
+1
+
+2024-05-04
+
+2024-05-20
+
+2
+
+2
+
+4
+
+2024-05-04
+
+2024-05-18
+
+3
+
+3
+
+6
+
+2024-05-04
+
+2024-05-10
+
+While the 3NF structure is good, there might be a hidden determinant in the book_borrowings table. Assuming one borrower cannot borrow the same book twice simultaneously, the combination of book_id and borrower_id together uniquely identifies a borrowing record.
+
+This structure violates BCNF since the combined set (book_id and borrower_id) is not the primary key of the table (which is just borrowing_id).
+
+The solution?
+To achieve BCNF, we can either decompose the book_borrowings table into two separate tables or make the combined attribute set the primary key.
+
+Approach 1 (decompose the table): In this approach, we will be decomposing the book_borrowings table into separate tables:
+A table with borrowing_id as the primary key, borrowed_date, due_date, and returned_date.
+Another separate table to link books and borrowers, with book_id as a foreign key, borrower_id as a foreign key, and potentially additional attributes specific to the borrowing event.
+Approach 2 (make the combined attribute set the primary key): We can consider making book_id and borrower_id a composite primary key for uniquely identifying borrowing records. The problem with this approach is that it won’t serve its purpose if a borrower can borrow the same book multiple times.
+In the end, your choice between these options depends on your specific data needs and how you want to model borrowing relationships.
+
+Fourth Normal Form (4NF)
+4NF deals with multi-valued dependencies. A multi-valued dependency exists when one attribute can have multiple dependent attributes, and these dependent attributes are independent of the primary key. It’s quite complex, but we will be exploring it deeper using an example.
+
+The library example we’ve been using throughout these explanations is not applicable at this normalization level. 4NF typically applies to situations where a single attribute might have multiple dependent attributes that don’t directly relate to the primary key.
+
+Let’s use another scenario. Imagine a database that stores information about publications. We will be considering a “Publications” table with columns, title, author, publication_year, and keywords.
+
+publication_id (PK)
+
+title
+
+author
+
+publication_year
+
+keywords
+
+1
+
+To Kill a Mockingbird
+
+Harper Lee
+
+1960
+
+Coming-of-Age, Legal
+
+2
+
+The Lord of the Rings
+
+J. R. R. Tolkien
+
+1954
+
+Fantasy, Epic, Adventure
+
+3
+
+Pride and Prejudice
+
+Jane Austen
+
+1813
+
+Romance, Social Commentary
+
+The table structure above is violating 4NF because:
+
+The keywords column has a multi-valued dependency on the primary key publication_id. What this means is that a publication can have multiple keywords, and these keywords are independent of the publication’s unique identifier.
+The solution?
+We can create a separate table.
+
+Publication_keywords table
+
+publication_id (FK)
+
+keyword
+
+1
+
+Coming-of-Age
+
+1
+
+Legal
+
+2
+
+Fantasy
+
+2
+
+Epic
+
+2
+
+Adventure
+
+3
+
+Romance
+
+3
+
+Social Commentary
+
+The newly created table (Publication_keywords) establishes a many-to-many relationship between publication and keywords. Each publication can have multiple keywords linked through the publication_id, which is a foreign key, and each keyword can be associated with multiple publications.
+
+With this, we have successfully eliminated the multi-valued dependency and achieved 4NF.
+
+Fifth Normal Form (5NF)
+5NF is the most complex form of normalization that eliminates join dependencies. This is a situation where data needs to be joined from multiple tables to answer a specific query, even when those tables are already in 4NF.
+
+In simpler terms, 5NF ensures that no additional information can be derived by joining the tables together that wasn’t already available in the separate tables.
+
+Join dependencies are less likely to occur when tables are already normalized (in 3NF or 4NF), hence the difficulty in creating a clear and straightforward example for 5NF.
+
+However, let’s take a look at this scenario where 5NF might be relevant:
+
+Imagine a university database with normalized tables for “Courses” and “Enrollments.”
+
+Courses table
+
+course_id (PK)
+
+course_name
+
+department
+
+101
+
+Introduction to Programming
+
+Computer Science
+
+202
+
+Data Structures and Algorithms
+
+Computer Science
+
+301
+
+Web Development I
+
+Computer Science
+
+401
+
+Artificial Intelligence
+
+Computer Science
+
+Enrollments table
+
+enrollment_id (PK)
+
+student_id (FK)
+
+course_id (FK)
+
+grade
+
+1
+
+12345
+
+101
+
+A
+
+2
+
+12345
+
+202
+
+B
+
+3
+
+56789
+
+301
+
+A-
+
+4
+
+56789
+
+401
+
+B+
+
+Assuming these tables are already in 3NF or 4NF, a join dependency might exist depending on how data is stored. For instance, a course has a prerequisite requirement stored within the “Courses” table as the “prerequisite_course_id” column.
+
+This might seem efficient at first glance. However, consider a query that needs to retrieve a student’s enrolled courses and their respective prerequisites. In this scenario, you would need to join the “Courses” and “Enrollments” tables, then potentially join the “Courses” table to retrieve prerequisite information.
+
+The Solution?
+To potentially eliminate the join dependency and achieve 5NF, we could introduce a separate “Course Prerequisites” table:
+
+Course_prerequisite table
+
+course_id (FK)
+
+prerequisite_course_id (FK)
+
+202
+
+101
+
+301
+
+NULL
+
+401
+
+202
+
+This approach separates prerequisite information and allows efficient retrieval of enrolled courses and their prerequisites in a single join between the “Enrollments” and “Course_prerequisites” tables.
+
+Note: We are assuming a student can only have one prerequisite per course.
+
+5NF is a very complex and rare type of normalization, so as someone just starting their learning journey in data, you might not find an application. However, it’s going to be added knowledge and will make you prepared when you stumble on complex databases.
+
+Build Your SQL Skills
+If you are reading this, then congratulations to you for sticking around to the end. It has been a great ride exploring what normalization in SQL is, why normalization in SQL is important, what causes the need for normalization, and the different types of database normalization. The scenarios used in explaining the different types of normalization are so you can fully understand and also be able to apply this knowledge in your learning journey.
+
+Normalization is a fundamental skill for anybody starting their career in any data-related career path. By understanding these principles, you are now ready to build efficient and well-organized databases.
+
+Learning is very important in the data space, and for you to enhance your SQL skills, we have some resources for you.
